@@ -1,0 +1,7 @@
+{
+  "author": "QuyTran",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint-config-discourse": "latest"
+  }
+}

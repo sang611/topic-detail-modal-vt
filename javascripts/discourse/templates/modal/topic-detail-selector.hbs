@@ -1,0 +1,97 @@
+{{#d-modal-body class="select-topic-modal"}}
+
+<div class="vt-modal-body-left">
+  <div class="vt-category">
+    <span>
+      {{category-link topic.category}}
+    </span>
+  </div>
+  <div class="vt-comments">
+    <div class="vt-comments-title">
+      {{topic.title}}
+    </div>
+    <div class="vt-comments-info">
+      <div class="vt-users">
+        <img src="{{topic.lastPosterUser.avatar_template}}" class="avatar">
+        {{#if topic.lastPosterUser.name}}
+          <span class="user-name">{{topic.lastPosterUser.name}}</span>
+        {{else}}
+          <span class="user-name">{{topic.lastPosterUser.username}}</span>
+        {{/if}}
+      </div>
+
+      <div class="vt-control">
+        <ul>
+          <li>
+            <div class='topic-replies posts-map {{likesHeat}} inline sub' title='{{title}}'>
+              <a href class='posts-map badge-posts {{likesHeat}}'>{{d-icon "far-comment"}} {{number topic.comment_count}}</a>
+            </div>
+          </li>
+          <li>
+            {{vt-heart topic=topic liked=liked post=topicDetail}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {{#each hideComments as |com index|}}
+    <div class="vt-comments-list">
+      <div class="vt-users">
+        <img src="{{com.user_avatar_template}}"  class="avatar">
+        <span>{{com.name}}</span>
+      </div>
+      <div class="vt-comments-item">
+        {{dir-span com.raw htmlSafe="true"}}
+      </div>
+    </div>
+  {{/each}}
+
+  <div class="vt-comments-list-container">
+  {{#each lastComments as |com index|}}
+    <div class="vt-comments-list">
+      <div class="vt-users">
+        <img src="{{com.user_avatar_template}}"  class="avatar">
+        <span>{{com.username}}</span>
+      </div>
+      <div class="vt-comments-item">
+        {{dir-span com.raw htmlSafe="true"}}
+      </div>
+    </div>
+  {{/each}}
+  </div>
+
+  {{vt-comments-form topic=topic post=topicDetail user=user}}
+</div>
+
+
+<div class="vt-modal-body-right">
+  <div class="topic-content">
+    {{dir-span topicDetail.cooked htmlSafe="true"}}
+  </div>
+
+  {{#if topic.answer_content}}
+    <div class="topic-reply">
+      <div class="reply-user">
+        <span>{{topic.answer_user}}</span>
+      </div>
+      <div class="reply-category">
+        <span>TRẢ LỜI</span>
+      </div>
+
+      <div class="reply-content">
+        <i>
+          {{dir-span topic.answer_content htmlSafe="true"}}
+        </i>
+      </div>
+      {{vt-vote-form topic=topic post=topicDetail}}
+    </div>
+  {{else}}
+    <div class="topic-reply">
+    </div>
+    {{vt-reply-form topic=topic post=topicDetail}}
+  {{/if}}
+
+
+</div>
+{{/d-modal-body}}

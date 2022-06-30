@@ -1,0 +1,9 @@
+{
+  "about_url": null,
+  "license_url": null,
+  "name": "Topic Detail Modal",
+  "component": true,
+  "assets": {
+    "background": "common/bg.png"
+  }
+}

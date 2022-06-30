@@ -1,0 +1,15 @@
+<div class="reply-vote">
+  <div class="reply-vote-content">
+    Đồng chí vui lòng đánh giá mức độ hài lòng về câu trả lời
+  </div>
+  <div class="reply-vote-star">
+
+    <ul class="ratings">
+      <li class="star {{{votes.[4]}}} star-5" {{on "click" (action "voting" 5)}}></li>
+      <li class="star {{{votes.[3]}}} star-4" {{on "click" (action "voting" 4)}}></li>
+      <li class="star {{{votes.[2]}}} star-3" {{on "click" (action "voting" 3)}}></li>
+      <li class="star {{{votes.[1]}}} star-2" {{on "click" (action "voting" 2)}}></li>
+      <li class="star {{{votes.[0]}}} star-1" {{on "click" (action "voting" 1)}}></li>
+    </ul>
+  </div>
+</div>
