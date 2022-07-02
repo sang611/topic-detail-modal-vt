@@ -87,6 +87,7 @@ function initializeClickTopic(api) {
         topicDetail: topicDetail,
         lastComments: lastComments,
         hideComments: hideComments,
+        countComment: topic_detail.comment_count,
         topic: this.topic,
         user: this.currentUser,
         liked: liked,

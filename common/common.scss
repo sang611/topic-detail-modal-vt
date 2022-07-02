@@ -41,6 +41,7 @@
     width: 40%;
     padding-left: 50px;
     padding-right: 40px;
+    word-wrap: break-word;
     .vt-category {
       color: red;
       text-transform: uppercase;
@@ -159,8 +160,9 @@
     background: url(#{$background});
     padding: 60px 48px;
     color: #000000;
-    // background-repeat: repeat;
     background-size: 100%;
+    word-wrap: break-word;
+    overflow: hidden;
     .topic-content {
       font-size: 20px;
     }

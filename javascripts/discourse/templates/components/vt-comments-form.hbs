@@ -1,13 +1,12 @@
 <div class="vt-comments-form-container">
   <div class="vt-users">
-    <img src="{{user.avatar_template}}" class="avatar {{user.username}}">
+    {{avatar user imageSize="large"}}
   </div>
   <div class="vt-comments-form">
     <input
       class="vt-comments-form-input"
       value={{comment}}
       placeholder="Nhập bình luận"
-      onchange={{action "required" }}
     />
 
       {{d-button
