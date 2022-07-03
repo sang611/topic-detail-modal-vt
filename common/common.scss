@@ -107,6 +107,10 @@
       margin-bottom: 24px;
       font-weight: 500;
       font-size: 13px;
+      cursor: pointer;
+      &.hidden {
+        display: none;
+      }
     }
 
     .vt-comments-list {

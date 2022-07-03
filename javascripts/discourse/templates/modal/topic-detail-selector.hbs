@@ -36,24 +36,11 @@
       </div>
     </div>
   </div>
-
-  {{#each hideComments as |com index|}}
-    <div class="vt-comments-list">
-      <div class="vt-users">
-        {{avatar com.user_info
-          imageSize="large"
-        }}
-        <span>{{com.name}}</span>
-      </div>
-      <div class="vt-comments-item">
-        {{dir-span com.raw htmlSafe="true"}}
-      </div>
-    </div>
-  {{/each}}
+  {{vt-comments-more topic=topic post=topicDetail}}
 
   <div class="vt-comments-list-container">
   {{#each lastComments as |com index|}}
-    <div class="vt-comments-list">
+    <div class="vt-comments-list load-init" data-id="{{com.id}}">
       <div class="vt-users">
         {{avatar com.user_info
           imageSize="large"

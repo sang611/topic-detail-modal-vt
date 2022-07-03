@@ -81,10 +81,11 @@ function initializeClickTopic(api) {
         lastComments = commentsList.slice(countComment - limitComment);
         hideComments = commentsList.slice(0, countComment - limitComment);
       }
+
       let modalTopic = showModal("topic-detail-selector");
       modalTopic.setProperties({
         topicDetail: topicDetail,
-        lastComments: lastComments,
+        lastComments: commentsList,
         hideComments: hideComments,
         countComment: topic_detail.comment_count,
         topic: this.topic,
