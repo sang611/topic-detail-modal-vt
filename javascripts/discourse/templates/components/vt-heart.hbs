@@ -1,4 +1,4 @@
-<div class="topic-views topic-views-hear inline sub {{liked}}">
+<div class="topic-views topic-views-hear inline sub {{liked}}" {{on "click" (action "save" liked)}}>
   {{d-icon "heart" }}&nbsp;
   <span class="like-count">{{number topic.like_count}}</span>
 </div>

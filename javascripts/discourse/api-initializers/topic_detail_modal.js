@@ -75,7 +75,6 @@ function initializeClickTopic(api) {
       const countComment = commentsList.length;
       let lastComments = [];
       let hideComments = [];
-
       if (commentsList.length <= limitComment) {
         lastComments = commentsList;
       } else {

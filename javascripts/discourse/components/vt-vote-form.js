@@ -12,6 +12,7 @@ import { headerOffset } from "discourse/lib/offset-calculator";
 import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
+import User from "discourse/models/user";
 
 const START_DRAG_EVENTS = ["touchstart", "mousedown"];
 const DRAG_EVENTS = ["touchmove", "mousemove"];
@@ -29,7 +30,7 @@ export default Component.extend(KeyEnterEscape, {
     let votes = new Array(5);
     this.set('comment', null);
 
-    for (let i = 0; i < this.post.qa_user_voted_direction; i++) {
+    for (let i = 0; i < this.topic.qa_user_voted_direction; i++) {
       votes[i] = "active"
     }
     this.set('votes', votes);
@@ -39,9 +40,14 @@ export default Component.extend(KeyEnterEscape, {
 
   actions: {
     voting(e) {
+      if(User.current().id == this.topic.answer_user_id) {
+        alert("Bạn không thể tự vote cho câu trả lời của mình.");
+        return;
+      }
+
       return ajax("/qa/vote", {
         type: "POST",
-        data: { direction: e, post_id: this.post.id },
+        data: { direction: e, post_id: this.topic.answer_id },
       }).then((response) => {
         $(".ratings .star").removeClass("active")
         for (let i = 1; i <= response.vote; i++) {

@@ -12,6 +12,7 @@ import { headerOffset } from "discourse/lib/offset-calculator";
 import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
+import User from "discourse/models/user";
 
 const START_DRAG_EVENTS = ["touchstart", "mousedown"];
 const DRAG_EVENTS = ["touchmove", "mousemove"];
@@ -30,25 +31,42 @@ export default Component.extend(KeyEnterEscape, {
 
   actions: {
     save(e) {
-      return ajax("/post_actions", {
-        type: "POST",
-        data: {
-          id: this.post.id,
-          post_action_type_id: 2,
-          flag_topic: false
-        },
-      }).then((response) => {
-        $(".topic-views-hear").removeClass("liked").addClass("liked")
-      })
-      .catch(popupAjaxError)
-      .finally(() => {
+      if(User.current().id == this.post.user_id) {
+        alert("Bạn không thể tự like cho bài viết của mình.");
+        return;
+      }
 
-      });
-
-      // /post_actions
-//       id: 34
-// post_action_type_id: 2
-// flag_topic: false
+      if ($(".topic-views-hear").hasClass("liked"))
+        return ajax(`/post_actions/${this.post.id}`, {
+          type: "DELETE",
+          data: {
+            post_action_type_id: 2,
+          },
+        }).then((response) => {
+          $(".topic-views-hear").removeClass("liked")
+          let number = parseInt($(".topic-views-hear .like-count .number").html())
+          $(".topic-views-hear .like-count .number").html(number - 1)
+        })
+          .catch(popupAjaxError)
+          .finally(() => {
+          });
+      else {
+        return ajax("/post_actions", {
+          type: "POST",
+          data: {
+            id: this.post.id,
+            post_action_type_id: 2,
+            flag_topic: false
+          },
+        }).then((response) => {
+          $(".topic-views-hear").removeClass("liked").addClass("liked")
+          let number = parseInt($(".topic-views-hear .like-count .number").html())
+          $(".topic-views-hear .like-count .number").html(number + 1)
+        })
+          .catch(popupAjaxError)
+          .finally(() => {
+          });
+      }
     }
   }
 })

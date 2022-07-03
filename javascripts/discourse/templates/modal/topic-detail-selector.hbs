@@ -12,11 +12,11 @@
     </div>
     <div class="vt-comments-info">
       <div class="vt-users">
-        {{avatar topic.lastPosterUser imageSize="large"}}
-        {{#if topic.lastPosterUser.name}}
-          <span class="user-name">{{topic.lastPosterUser.name}}</span>
+        {{avatar topic.creator imageSize="large"}}
+        {{#if topic.creator.name}}
+          <span class="user-name">{{topic.creator.name}}</span>
         {{else}}
-          <span class="user-name">{{topic.lastPosterUser.username}}</span>
+          <span class="user-name">{{topic.creator.username}}</span>
         {{/if}}
       </div>
 
