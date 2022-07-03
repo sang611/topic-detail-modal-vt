@@ -64,7 +64,7 @@ export default Component.extend(KeyEnterEscape, {
           $(".vt-reply-form-container").hide()
         })
         .catch((error) => {
-          popupAjaxError(error)
+          alert("Bạn chưa có quyền trả lời bài viết này.")
         });
     },
   }

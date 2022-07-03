@@ -37,7 +37,6 @@ export default Component.extend(KeyEnterEscape, {
 
   },
 
-
   actions: {
     voting(e) {
       if(User.current().id == this.topic.answer_user_id) {
@@ -53,6 +52,7 @@ export default Component.extend(KeyEnterEscape, {
         for (let i = 1; i <= response.vote; i++) {
           $(`.ratings .star-${i}`).addClass("active")
         }
+        alert('Bạn đã bình chọn là '+response.vote);
       })
       .catch(popupAjaxError)
       .finally(() => {

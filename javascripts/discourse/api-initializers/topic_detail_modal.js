@@ -95,6 +95,7 @@ function initializeClickTopic(api) {
     },
 
     getTopic(topic) {
+      $('#loading').show();
       return ajax(this.topic.url, {
         dataType: "json",
         type: "GET"
@@ -102,11 +103,18 @@ function initializeClickTopic(api) {
     },
 
     click(e) {
-      this.getTopic().then(
-        (topic_detail) => this.showTopicModal(topic_detail)
+      this.getTopic()
+      .then(
+        (topic_detail) => {
+          this.showTopicModal(topic_detail);
+          $('#loading').hide();
+        }
       ).catch(
-        (error) => popupAjaxError(error)
-      );
+        (error) => {
+          popupAjaxError(error);
+          $('#loading').hide();
+        }
+      )
     }
   });
 

@@ -76,6 +76,8 @@ export default Component.extend(KeyEnterEscape, {
         ${response.raw}
       </div>
     </div>`
+    let number = parseInt($(".vt-control .topic-replies .number").html());
+    $(".vt-control .topic-replies .number").html(number + 1);
     $(".vt-comments-list-container").append(html)
         })
         .catch(popupAjaxError)

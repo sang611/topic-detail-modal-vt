@@ -1,10 +1,10 @@
-.modal-inner-container {
+.modal-inner-container:has(> .select-topic-modal) {
   width: 70%;
   max-width: 100%;
+  border-radius: 20px;
   background-color: red;
   background: #FFFFFF;
   border: 1px solid #E2E2E2;
-  border-radius: 20px;
   .modal-header {
     .modal-close {
       font-size: 14px;
