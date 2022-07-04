@@ -91,7 +91,8 @@ function initializeClickTopic(api) {
         topic: this.topic,
         user: this.currentUser,
         liked: liked,
-        post: this.post
+        post: this.post,
+        topic_detail: topic_detail,
       });
     },
 

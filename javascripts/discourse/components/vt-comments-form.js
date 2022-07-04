@@ -55,7 +55,6 @@ export default Component.extend(KeyEnterEscape, {
         });
     },
     createComment(e) {
-
       return ajax("/qa/comments", {
         type: "POST",
         data: { raw: $(".vt-comments-form-input").val(), post_id: this.post.id },
@@ -73,7 +72,7 @@ export default Component.extend(KeyEnterEscape, {
         <span>${this.user.name}</span>
       </div>
       <div class="vt-comments-item">
-        ${response.raw}
+        ${response.cooked}
       </div>
     </div>`
     let number = parseInt($(".vt-control .topic-replies .number").html());

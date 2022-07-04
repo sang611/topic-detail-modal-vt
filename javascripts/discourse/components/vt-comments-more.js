@@ -33,7 +33,7 @@ export default Component.extend(KeyEnterEscape, {
     showmore(e) {
       $(".vt-comments-more ").hide()
       let last_comment_id = $(".vt-comments-list-container .vt-comments-list.load-init").first().data("id")
-      ajax("qa/comments/", {
+      ajax("/qa/comments/", {
         dataType: "json",
         type: "GET",
         data: { post_id: this.post.id, last_comment_id: last_comment_id }

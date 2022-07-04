@@ -45,6 +45,11 @@ export default Component.extend(KeyEnterEscape, {
             topic_id: this.topic.id
           }).then((result) => {
           $(".vt-reply-form-input").val("")
+          this.set('topic', {
+            ...this.topic,
+            answer_user: result.responseJson.post.display_username,
+            answer_content: result.responseJson.post.raw
+          });
           let html = `
           <div class="topic-reply">
             <div class="reply-user">
@@ -62,6 +67,7 @@ export default Component.extend(KeyEnterEscape, {
           </div>`
           $(".topic-content").append(html)
           $(".vt-reply-form-container").hide()
+
         })
         .catch((error) => {
           alert("Bạn chưa có quyền trả lời bài viết này.")

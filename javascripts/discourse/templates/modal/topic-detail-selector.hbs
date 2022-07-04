@@ -8,7 +8,7 @@
   </div>
   <div class="vt-comments">
     <div class="vt-comments-title">
-      {{topic.title}}
+      {{topic_detail.fancy_title}}
     </div>
     <div class="vt-comments-info">
       <div class="vt-users">
@@ -36,7 +36,9 @@
       </div>
     </div>
   </div>
-  {{vt-comments-more topic=topic post=topicDetail}}
+  {{#if (gt countComment 3)}}
+    {{vt-comments-more topic=topic post=topicDetail}}
+  {{/if}}
 
   <div class="vt-comments-list-container">
   {{#each lastComments as |com index|}}
@@ -48,7 +50,7 @@
         <span>{{com.name}}</span>
       </div>
       <div class="vt-comments-item">
-        {{dir-span com.raw htmlSafe="true"}}
+        {{dir-span com.cooked htmlSafe="true"}}
       </div>
     </div>
   {{/each}}
@@ -66,10 +68,10 @@
     {{dir-span topicDetail.cooked htmlSafe="true"}}
   </div>
 
-  {{#if topic.answer_content}}
+  {{#if topic_detail.answer_content}}
     <div class="topic-reply">
       <div class="reply-user">
-        <span>{{topic.answer_user}}</span>
+        <span>{{topic_detail.answer_user}}</span>
       </div>
       <div class="reply-category">
         <span>TRẢ LỜI</span>
@@ -77,7 +79,7 @@
 
       <div class="reply-content">
         <i>
-          {{dir-span topic.answer_content htmlSafe="true"}}
+          {{dir-span topic_detail.answer_content htmlSafe="true"}}
         </i>
       </div>
       {{vt-vote-form topic=topic post=topicDetail}}
