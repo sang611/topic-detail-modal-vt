@@ -67,7 +67,7 @@ export default Component.extend(KeyEnterEscape, {
           </div>`
           $(".topic-content").append(html)
           $(".vt-reply-form-container").hide()
-
+          $(".vt-reply-form-container-p").hide()
         })
         .catch((error) => {
           alert("Bạn chưa có quyền trả lời bài viết này.")

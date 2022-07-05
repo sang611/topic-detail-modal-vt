@@ -17,6 +17,15 @@
     display: none !important;
   }
 }
+
+.badge-wrapper {
+  .badge-category {
+    .category-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+  }
+}
 .topic-detail-selector-modal .modal-inner-container {
   width: 70%;
   max-width: 100%;
@@ -147,6 +156,11 @@
         color: #434343;
         font-weight: 500;
         padding: 8px 8px 9px 18px;
+        font-size: 13px;
+        p {
+          font-weight: 500;
+          font-size: 13px;
+        }
       }
     }
 
@@ -191,8 +205,16 @@
     overflow: hidden;
     .topic-content {
       font-size: 20px;
+      p {
+        font-size: 20px;
+        font-weight: 300;
+      }
     }
     .topic-reply{
+      .reply-content {
+        font-weight: 300;
+        font-size: 20px;
+      }
       .reply-user {
         color: #EA0033;
         font-weight: 600;
@@ -214,7 +236,8 @@
         border-radius: 100px;
         margin-top: 77px;
         padding: 10px 20px 10px 20px;
-        font-size: 0.8em;
+        font-size: 0.9em;
+        font-weight: 500;
         float: right;
         width: 90%;
 
