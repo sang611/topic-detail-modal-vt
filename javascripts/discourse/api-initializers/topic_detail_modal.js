@@ -68,8 +68,8 @@ FAST_REPLY_LENGTH_THRESHOLD = 10000;
 function initializeClickTopic(api) {
   api.modifyClass("component:topic-list-item", {
     showTopicModal(topic_detail) {
-      const liked = this.topic.liked ? "liked" : "";
       const topicDetail = topic_detail.post_stream.posts[0] || {};
+      const liked = topic_detail.liked ? "liked" : "";
       const commentsList = topicDetail.comments || [];
       const limitComment = 1;
       const countComment = commentsList.length;

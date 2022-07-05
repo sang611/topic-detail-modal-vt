@@ -88,6 +88,7 @@
         color: #000000;
         font-weight: 300;
         font-size: 30px;
+        line-height: 40px;
       }
       .vt-comments-info {
         display: flex;
@@ -105,6 +106,11 @@
             height: 30px;
             border-radius: 50%;
             margin-right: 11px;
+          }
+          .user-name {
+            line-height: 17px;
+            text-transform: uppercase;
+            font-size: 13px;
           }
         }
         .vt-control {
@@ -146,7 +152,7 @@
         display: flex;
         flex-direction: row;
         justify-content: left;
-
+        text-transform: uppercase;
       }
 
       .vt-comments-item {
@@ -205,6 +211,7 @@
     overflow: hidden;
     .topic-content {
       font-size: 20px;
+      line-height: 32px;
       p {
         font-size: 20px;
         font-weight: 300;
@@ -214,6 +221,8 @@
       .reply-content {
         font-weight: 300;
         font-size: 20px;
+        line-height: 32px;
+        font-size: italic;
       }
       .reply-user {
         color: #EA0033;
@@ -221,12 +230,14 @@
         font-size: 16px;
         margin-top: 60px;
         text-transform: uppercase;
+        line-height: 21px;
       }
       .reply-category {
         font-weight: 600;
         font-size: 16px;
         color: #000000;
         margin-bottom: 30px;
+        line-height: 21px;
       }
 
       .reply-vote {
