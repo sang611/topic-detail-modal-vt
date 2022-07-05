@@ -210,6 +210,23 @@ function initializeClickTopic(api) {
     },
 
   })
+
+  // let site_header_admin = this.user.admin
+
+  api.modifyClass('component:site-header', {
+    classNames: ['d-header-wrap'],
+
+    init() {
+      this._super(...arguments);
+      const currentUser = this.get("currentUser");
+      if(currentUser && currentUser.admin) {
+        this.elementId = 'vt-d-header-wrap-admin';
+      } else {
+        this.elementId = 'vt-d-header-wrap-user';
+      }
+    },
+
+  });
 };
 
 export default {

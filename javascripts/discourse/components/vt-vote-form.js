@@ -30,7 +30,7 @@ export default Component.extend(KeyEnterEscape, {
     let votes = new Array(5);
     this.set('comment', null);
 
-    for (let i = 0; i < this.topic.qa_user_voted_direction; i++) {
+    for (let i = 0; i < this.topic_detail.qa_user_voted_direction; i++) {
       votes[i] = "active"
     }
     this.set('votes', votes);
@@ -52,7 +52,6 @@ export default Component.extend(KeyEnterEscape, {
         for (let i = 1; i <= response.vote; i++) {
           $(`.ratings .star-${i}`).addClass("active")
         }
-        alert('Bạn đã bình chọn là '+response.vote);
       })
       .catch(popupAjaxError)
       .finally(() => {

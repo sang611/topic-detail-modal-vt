@@ -1,3 +1,22 @@
+#vt-d-header-wrap-user {
+  #toggle-hamburger-menu{
+    display: none;
+  }
+}
+.quick-access-profile {
+  .drafts{
+    display: none;
+  }
+  .do-not-disturb {
+    display: none !important;
+  }
+}
+.menu-links-row {
+  .user-bookmarks-link,
+  .user-pms-link {
+    display: none !important;
+  }
+}
 .topic-detail-selector-modal .modal-inner-container {
   width: 70%;
   max-width: 100%;

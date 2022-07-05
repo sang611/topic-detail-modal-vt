@@ -68,7 +68,7 @@
     {{dir-span topicDetail.cooked htmlSafe="true"}}
   </div>
 
-  {{#if topic_detail.answer_content}}
+  {{#if topic_detail.answer_user}}
     <div class="topic-reply">
       <div class="reply-user">
         <span>{{topic_detail.answer_user}}</span>
@@ -82,7 +82,7 @@
           {{dir-span topic_detail.answer_content htmlSafe="true"}}
         </i>
       </div>
-      {{vt-vote-form topic=topic post=topicDetail}}
+      {{vt-vote-form topic=topic post=topicDetail topic_detail=topic_detail}}
     </div>
   {{else}}
     <div class="topic-reply">
