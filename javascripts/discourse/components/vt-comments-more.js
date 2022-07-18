@@ -32,13 +32,13 @@ export default Component.extend(KeyEnterEscape, {
   actions: {
     showmore(e) {
       $(".vt-comments-more ").hide()
-      let last_comment_id = $(".vt-comments-list-container .vt-comments-list.load-init").first().data("id")
+      let last_comment_id = $(".vt-comments-list-container .vt-comments-list.load-init").last().data("id")
       ajax("/qa/comments/", {
         dataType: "json",
         type: "GET",
         data: { post_id: this.post.id, last_comment_id: last_comment_id }
       }).then((response) => {
-        let comments = response.comments
+        let comments = response.comments;
         let last_element = $(".vt-comments-list-container .vt-comments-list.load-init").first()
         for (let i = 0; i < comments.length; i++) {
           let avatar = renderAvatar(comments[i].user_info, {
@@ -56,7 +56,7 @@ export default Component.extend(KeyEnterEscape, {
           ${comments[i].raw}
         </div>
       </div>`
-          $(html).insertBefore($($(".vt-comments-list-container .vt-comments-list").first()))
+          $(html).insertAfter($($(".vt-comments-list-container .vt-comments-list").last()))
         }
       }).catch(
         (error) => popupAjaxError(error)

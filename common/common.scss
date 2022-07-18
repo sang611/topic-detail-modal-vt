@@ -70,6 +70,8 @@
     padding-left: 50px;
     padding-right: 40px;
     word-wrap: break-word;
+    overflow-y: auto;
+    overflow-x: hidden;
     .vt-category {
       color: red;
       text-transform: uppercase;
@@ -176,6 +178,8 @@
     }
 
     .vt-comments-list {
+      margin-bottom: 20px;
+
       .vt-users {
         display: flex;
         flex-direction: row;

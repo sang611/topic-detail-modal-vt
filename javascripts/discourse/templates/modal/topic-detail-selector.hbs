@@ -14,9 +14,9 @@
       <div class="vt-users">
         {{avatar topic.creator imageSize="large"}}
         {{#if topic.creator.name}}
-          <span class="user-name">{{topic.creator.name}}</span>
+        <b><span class="user-name">{{topic.creator.name}}</span></b>
         {{else}}
-          <span class="user-name">{{topic.creator.username}}</span>
+          <b><span class="user-name">{{topic.creator.username}}</span></b>
         {{/if}}
       </div>
 
@@ -47,6 +47,12 @@
     {{vt-comments-more topic=topic post=topicDetail}}
   {{/if}}
 
+{{#if topic.is_qa}}
+    {{vt-comments-form topic=topic post=topicDetail user=user}}
+  {{else}}
+    <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể comment.</i>
+  {{/if}}
+  <br />
   <div class="vt-comments-list-container">
   {{#each lastComments as |com index|}}
     <div class="vt-comments-list load-init" data-id="{{com.id}}">
@@ -62,11 +68,8 @@
     </div>
   {{/each}}
   </div>
-  {{#if topic.is_qa}}
-    {{vt-comments-form topic=topic post=topicDetail user=user}}
-  {{else}}
-    <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể comment.</i>
-  {{/if}}
+  
+  
 </div>
 
 <div class="vt-modal-body-right">

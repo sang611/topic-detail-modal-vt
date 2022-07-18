@@ -60,6 +60,7 @@ export default Component.extend(KeyEnterEscape, {
         data: { raw: $(".vt-comments-form-input").val(), post_id: this.post.id },
       })
         .then((response) => {
+          $(".vt-comments-form-input").next().hide()
           $(".vt-comments-form-input").val("")
           let avatar = renderAvatar(this.user, {
             imageSize: "large",
@@ -77,9 +78,14 @@ export default Component.extend(KeyEnterEscape, {
     </div>`
     let number = parseInt($(".vt-control .topic-replies .number").html());
     $(".vt-control .topic-replies .number").html(number + 1);
-    $(".vt-comments-list-container").append(html)
+    $(".vt-comments-list-container").prepend(html)
         })
-        .catch(popupAjaxError)
+        .catch((e) => {
+          console.log(e);
+          $(".vt-comments-form-input").after(
+            `<div style="color: red">${e.jqXHR.responseJSON.errors[0]}</div>`
+          )
+        })
         .finally(() => {
 
         });

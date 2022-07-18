@@ -70,7 +70,7 @@ function initializeClickTopic(api) {
     showTopicModal(topic_detail) {
       const topicDetail = topic_detail.post_stream.posts[0] || {};
       const liked = topic_detail.liked ? "liked" : "";
-      const commentsList = topicDetail.comments || [];
+      const commentsList = topicDetail.comments.reverse() || [];
       const limitComment = 1;
       const countComment = commentsList.length;
       let lastComments = [];
