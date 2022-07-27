@@ -2,6 +2,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import showModal from "discourse/lib/show-modal";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import Site from "discourse/models/site";
 
 export const CREATE_TOPIC = "createTopic",
   CREATE_SHARED_DRAFT = "createSharedDraft",
@@ -65,12 +66,20 @@ _draft_serializer = {
 _add_draft_fields = {},
 FAST_REPLY_LENGTH_THRESHOLD = 10000;
 
+
+
 function initializeClickTopic(api) {
   api.modifyClass("component:topic-list-item", {
     showTopicModal(topic_detail) {
       const topicDetail = topic_detail.post_stream.posts[0] || {};
       const liked = topic_detail.liked ? "liked" : "";
       const commentsList = topicDetail.comments.reverse() || [];
+      
+      commentsList.map(cm => {
+        if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
+        return cm;
+      })
+
       const limitComment = 1;
       const countComment = commentsList.length;
       let lastComments = [];
@@ -93,6 +102,7 @@ function initializeClickTopic(api) {
         liked: liked,
         post: this.post,
         topic_detail: topic_detail,
+        more_comment: topic_detail.comment_count <= 3 ? false : true
       });
     },
 
@@ -227,7 +237,16 @@ function initializeClickTopic(api) {
     },
 
   });
+
+  api.modifyClass("component:item", {
+    click(e) {
+      alert("Click")
+    }
+  });
 };
+
+
+
 
 export default {
   name: "apply-click-topic",

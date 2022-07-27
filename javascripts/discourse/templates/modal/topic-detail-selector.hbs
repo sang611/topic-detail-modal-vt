@@ -1,37 +1,37 @@
 {{#d-modal-body class="select-topic-modal"}}
-
-<div class="vt-modal-body-left">
-  <div class="vt-category">
-    <span>
-      {{category-link topic.category}}
-    </span>
-  </div>
-  <div class="vt-comments">
-    <div class="vt-comments-title">
-      {{topic_detail.fancy_title}}
+<div id="topic-modal-wrap">
+  <div class="vt-modal-body-left">
+    <div class="vt-category">
+      <span>
+        {{category-link topic.category}}
+      </span>
     </div>
-    <div class="vt-comments-info">
-      <div class="vt-users">
-        {{avatar topic.creator imageSize="large"}}
-        {{#if topic.creator.name}}
-        <b><span class="user-name">{{topic.creator.name}}</span></b>
-        {{else}}
-          <b><span class="user-name">{{topic.creator.username}}</span></b>
-        {{/if}}
+    <div class="vt-comments">
+      <div class="vt-comments-title">
+        {{topic_detail.fancy_title}}
       </div>
+      <div class="vt-comments-info">
+        <div class="vt-users">
+          {{avatar topic.creator imageSize="large"}}
+          {{#if topic.creator.name}}
+          <b><span class="user-name">{{topic.creator.name}}</span></b>
+          {{else}}
+          <b><span class="user-name">{{topic.creator.username}}</span></b>
+          {{/if}}
+        </div>
 
-      <div class="vt-control">
-        {{#if topic.is_qa}}
+        <div class="vt-control">
+          {{#if topic.is_qa}}
           <ul>
             <li>
               <div class='topic-replies posts-map {{likesHeat}} inline' title='{{title}}'>
-                              <div class="topic-replies-icon">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M15.992 1.6C15.992 0.72 15.28 0 14.4 0H1.6C0.72 0 0 0.72 0 1.6V11.2C0 12.08 0.72 12.8 1.6 12.8H12.8L16 16L15.992 1.6ZM12.8 9.6H3.2V8H12.8V9.6ZM12.8 7.2H3.2V5.6H12.8V7.2ZM12.8 4.8H3.2V3.2H12.8V4.8Z"
-                    fill="#A4A4A4" />
-                </svg>
-              </div>
+                <div class="topic-replies-icon">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M15.992 1.6C15.992 0.72 15.28 0 14.4 0H1.6C0.72 0 0 0.72 0 1.6V11.2C0 12.08 0.72 12.8 1.6 12.8H12.8L16 16L15.992 1.6ZM12.8 9.6H3.2V8H12.8V9.6ZM12.8 7.2H3.2V5.6H12.8V7.2ZM12.8 4.8H3.2V3.2H12.8V4.8Z"
+                      fill="#A4A4A4" />
+                  </svg>
+                </div>
                 {{number countComment }}
               </div>
             </li>
@@ -39,45 +39,23 @@
               {{vt-heart topic=topic liked=liked post=topicDetail}}
             </li>
           </ul>
-        {{/if}}
+          {{/if}}
+        </div>
       </div>
     </div>
-  </div>
-  {{#if (gt countComment 3)}}
-    {{vt-comments-more topic=topic post=topicDetail}}
-  {{/if}}
+    {{#if (gt countComment 3)}}
+    {{!-- {{vt-comments-more topic=topic post=topicDetail}} --}}
+    {{/if}}
 
-{{#if topic.is_qa}}
-    {{vt-comments-form topic=topic post=topicDetail user=user}}
-  {{else}}
-    <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể comment.</i>
-  {{/if}}
-  <br />
-  <div class="vt-comments-list-container">
-  {{#each lastComments as |com index|}}
-    <div class="vt-comments-list load-init" data-id="{{com.id}}">
-      <div class="vt-users">
-        {{avatar com.user_info
-          imageSize="large"
-        }}
-        <span>{{com.name}}</span>
-      </div>
-      <div class="vt-comments-item">
-        {{dir-span com.cooked htmlSafe="true"}}
-      </div>
+  </div>
+
+
+  <div class="vt-modal-body-right">
+    <div class="topic-content">
+      {{dir-span topicDetail.cooked htmlSafe="true"}}
     </div>
-  {{/each}}
-  </div>
-  
-  
-</div>
 
-<div class="vt-modal-body-right">
-  <div class="topic-content">
-    {{dir-span topicDetail.cooked htmlSafe="true"}}
-  </div>
-
-  {{#if topic_detail.answer_user}}
+    {{#if topic_detail.answer_user}}
     <div class="topic-reply">
       <div class="reply-user">
         <span>{{topic_detail.answer_user}}</span>
@@ -91,16 +69,45 @@
       </div>
       {{vt-vote-form topic=topic post=topicDetail topic_detail=topic_detail}}
     </div>
-  {{else}}
+    {{else}}
     <div class="topic-reply">
     </div>
     {{#if topic.is_qa}}
-      {{vt-reply-form topic=topic post=topicDetail}}
+    {{vt-reply-form topic=topic post=topicDetail}}
     {{else}}
-      <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể answer.</i>
+    <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể answer.</i>
     {{/if}}
-  {{/if}}
+    {{/if}}
+  </div>
 
+  <div class="vt-modal-body-comment">
+    {{#if more_comment}}
+    {{vt-comments-more topic=topic post=topicDetail}}
+    {{/if}}
+    {{#if topic.is_qa}}
+    {{vt-comments-form topic=topic post=topicDetail user=user}}
+    {{else}}
+    <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể comment.</i>
+    {{/if}}
+    <br />
+    <div class="vt-comments-list-container">
+      {{#each lastComments as |com index|}}
+      <div class="vt-comments-list load-init" data-id="{{com.id}}">
+        <div class="vt-users">
+          {{avatar com.user_info
+          imageSize="large"
+          }}
+          <span>{{com.name}}</span>
+        </div>
+        <div class="vt-comments-item">
+          {{dir-span com.cooked htmlSafe="true"}}
+        </div>
+      </div>
+      {{/each}}
+    </div>
 
+  </div>
 </div>
+<div id="topic-modal-footer"></div>
+
 {{/d-modal-body}}

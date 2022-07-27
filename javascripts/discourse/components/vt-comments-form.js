@@ -12,6 +12,8 @@ import { headerOffset } from "discourse/lib/offset-calculator";
 import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
+import User from "discourse/models/user";
+
 
 const START_DRAG_EVENTS = ["touchstart", "mousedown"];
 const DRAG_EVENTS = ["touchmove", "mousemove"];
@@ -29,6 +31,7 @@ export default Component.extend(KeyEnterEscape, {
     this._super(...arguments);
     this.set('comment', null);
   },
+
 
   keyDown(e) {
     if (e.key === "Enter") {
@@ -55,40 +58,45 @@ export default Component.extend(KeyEnterEscape, {
         });
     },
     createComment(e) {
+      
       return ajax("/qa/comments", {
         type: "POST",
         data: { raw: $(".vt-comments-form-input").val(), post_id: this.post.id },
       })
         .then((response) => {
-          $(".vt-comments-form-input").next().hide()
+		  $(".error-input").html("");
           $(".vt-comments-form-input").val("")
           let avatar = renderAvatar(this.user, {
             imageSize: "large",
             siteSettings: this.siteSettings,
           })
 
+          let user_name = this.user.name;
+          let user_username = this.user.username;
+
           let html = `<div class="vt-comments-list">
-      <div class="vt-users">
-        ${avatar}
-        <span>${this.user.name}</span>
-      </div>
-      <div class="vt-comments-item">
-        ${response.cooked}
-      </div>
-    </div>`
-    let number = parseInt($(".vt-control .topic-replies .number").html());
-    $(".vt-control .topic-replies .number").html(number + 1);
-    $(".vt-comments-list-container").prepend(html)
+                      <div class="vt-users">
+                        ${avatar}
+                        <span>${(user_name && user_name.trim() != "") ? user_name : user_username}</span>
+                      </div>
+                      <div class="vt-comments-item">
+                        ${response.cooked}
+                      </div>
+                    </div>`
+          let number = parseInt($(".vt-control .topic-replies .number").html());
+          $(".vt-control .topic-replies .number").html(number + 1);
+          $(".vt-comments-list-container").prepend(html)
         })
         .catch((e) => {
-          console.log(e);
-          $(".vt-comments-form-input").after(
-            `<div style="color: red">${e.jqXHR.responseJSON.errors[0]}</div>`
-          )
+          $(".error-input").html(`${e.jqXHR.responseJSON.errors[0]}`);
         })
-        .finally(() => {
+        .finally(() => {});
 
-        });
+        
     }
   }
 })
+
+
+
+
