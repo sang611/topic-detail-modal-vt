@@ -13,10 +13,14 @@
       <div class="vt-comments-info">
         <div class="vt-users">
           {{avatar topic.creator imageSize="large"}}
+          {{#if topic.display_name}}
+            <b><span class="user-name">{{topic.display_name}}</span></b>
+          {{else}}
           {{#if topic.creator.name}}
           <b><span class="user-name">{{topic.creator.name}}</span></b>
           {{else}}
           <b><span class="user-name">{{topic.creator.username}}</span></b>
+          {{/if}}
           {{/if}}
         </div>
 

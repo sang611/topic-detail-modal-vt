@@ -73,7 +73,7 @@ function initializeClickTopic(api) {
     showTopicModal(topic_detail) {
       const topicDetail = topic_detail.post_stream.posts[0] || {};
       const liked = topic_detail.liked ? "liked" : "";
-      const commentsList = topicDetail.comments.reverse() || [];
+      const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
       
       commentsList.map(cm => {
         if(!cm.name || cm.name.trim() == "") cm.name = cm.username;

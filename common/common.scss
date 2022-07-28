@@ -63,9 +63,11 @@
       overflow-y: auto;
       display: grid;
       grid-template-areas: "left right"
-        "comment right";
+                          "comment right"
+                          ". right"
+                          ". right";
       grid-template-columns: 4fr 6fr;
-      grid-template-rows: 1.5fr 2fr;
+      // grid-template-rows: 1.5fr 2fr;
       max-height: 80vh !important;
     }
 
