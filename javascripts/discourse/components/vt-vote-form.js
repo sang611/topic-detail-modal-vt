@@ -52,6 +52,7 @@ export default Component.extend(KeyEnterEscape, {
         for (let i = 1; i <= response.vote; i++) {
           $(`.ratings .star-${i}`).addClass("active")
         }
+        alert(`Bạn đã đánh giá ${e} sao.`)
       })
       .catch(popupAjaxError)
       .finally(() => {
