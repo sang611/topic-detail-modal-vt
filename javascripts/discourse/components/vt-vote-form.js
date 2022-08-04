@@ -39,14 +39,24 @@ export default Component.extend(KeyEnterEscape, {
 
   actions: {
     voting(e) {
-      if(User.current().id == this.topic.answer_user_id) {
+      
+      let answer_user_id = this.topic.answer_user_id;
+      if(!answer_user_id || answer_user_id === "") 
+        answer_user_id = this.topic_detail.answer_user_id;
+
+
+      if(User.current().id == answer_user_id) {
         alert("Bạn không thể tự vote cho câu trả lời của mình.");
         return;
       }
 
+      let answer_id = this.topic.answer_id;
+      if(!answer_id || answer_id === "") 
+        answer_id = this.topic_detail.answer_id
+
       return ajax("/qa/vote", {
         type: "POST",
-        data: { direction: e, post_id: this.topic.answer_id },
+        data: { direction: e, post_id: answer_id },
       }).then((response) => {
         $(".ratings .star").removeClass("active")
         for (let i = 1; i <= response.vote; i++) {

@@ -8,7 +8,7 @@
     </div>
     <div class="vt-comments">
       <div class="vt-comments-title">
-        {{topic_detail.fancy_title}}
+        {{topic_detail.title}}
       </div>
       <div class="vt-comments-info">
         <div class="vt-users">
@@ -69,7 +69,8 @@
       </div>
 
       <div class="reply-content">
-        {{dir-span topic_detail.answer_content htmlSafe="true"}}
+        {{!-- {{dir-span topic_detail.answer_content htmlSafe="true"}} --}}
+        <pre>{{topic_detail.answer_content}}</pre>
       </div>
       {{vt-vote-form topic=topic post=topicDetail topic_detail=topic_detail}}
     </div>

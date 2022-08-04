@@ -61,10 +61,11 @@ export default Component.extend(KeyEnterEscape, {
 
             <div class="reply-content">
               <i>
-                ${result.responseJson.post.raw}
+              <pre>${result.responseJson.post.raw}</pre>
               </i>
             </div>
           </div>`
+          $(".topic-content").append('')
           $(".topic-content").append(html)
           $(".vt-reply-form-container").hide()
           $(".vt-reply-form-container-p").hide()
