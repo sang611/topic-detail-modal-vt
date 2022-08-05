@@ -1,0 +1,18 @@
+#topic-modal-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    overflow-y: auto;
+}
+
+.vt-modal-body-left,
+.vt-modal-body-comment {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.vt-modal-body-right {
+    padding: 20px 16px !important;
+    grid-column: 1;
+    grid-row: auto;
+}
