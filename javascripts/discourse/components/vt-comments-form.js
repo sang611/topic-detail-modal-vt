@@ -58,13 +58,13 @@ export default Component.extend(KeyEnterEscape, {
         });
     },
     createComment(e) {
-      
+      $(".error-input").html("Đang gửi ...");
       return ajax("/qa/comments", {
         type: "POST",
         data: { raw: $(".vt-comments-form-input").val(), post_id: this.post.id },
       })
         .then((response) => {
-		  $(".error-input").html("");
+		      $(".error-input").html("");
           $(".vt-comments-form-input").val("")
           let avatar = renderAvatar(this.user, {
             imageSize: "large",
