@@ -66,9 +66,65 @@ _draft_serializer = {
 _add_draft_fields = {},
 FAST_REPLY_LENGTH_THRESHOLD = 10000;
 
+function autoShowModal(currentUser) {
+  
+  const params = new URLSearchParams(window.location.search)
+  let topicId = params.get('topic-id');
+  let topicSlug = params.get('topic-slug');
+  let isShowModal = params.get('show-modal');
+  if(topicId && topicSlug && isShowModal == 'true')
+  ajax(`/t/${topicSlug}/${topicId}`, {
+    dataType: "json",
+    type: "GET"
+  })
+  .then(topic_detail => {
+    const topicDetail = topic_detail.post_stream.posts[0] || {};
+      const liked = topic_detail.liked ? "liked" : "";
+      const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
+      
+      commentsList.map(cm => {
+        if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
+        return cm;
+      })
 
+      const limitComment = 1;
+      const countComment = commentsList.length;
+      let lastComments = [];
+      let hideComments = [];
+      if (commentsList.length <= limitComment) {
+        lastComments = commentsList;
+      } else {
+        lastComments = commentsList.slice(countComment - limitComment);
+        hideComments = commentsList.slice(0, countComment - limitComment);
+      }
+
+      let modalTopic = showModal("topic-detail-selector");
+      let poster = topic_detail.post_stream.posts[0];
+      
+      topic_detail.creator = {
+        id: poster.user_id,
+        avatar_template: poster.avatar_template,
+        name: poster.name,
+        username: poster.username
+      }
+      modalTopic.setProperties({
+        topicDetail: topicDetail,
+        lastComments: commentsList,
+        hideComments: hideComments,
+        countComment: topic_detail.comment_count,
+        topic: topic_detail,
+        user: currentUser,
+        liked: liked,
+        post: undefined,
+        topic_detail: topic_detail,
+        more_comment: topic_detail.comment_count <= 3 ? false : true
+      });
+  })
+}
 
 function initializeClickTopic(api) {
+  
+  autoShowModal(api.getCurrentUser())
   api.modifyClass("component:topic-list-item", {
     showTopicModal(topic_detail) {
       const topicDetail = topic_detail.post_stream.posts[0] || {};
@@ -104,10 +160,12 @@ function initializeClickTopic(api) {
         topic_detail: topic_detail,
         more_comment: topic_detail.comment_count <= 3 ? false : true
       });
+      
     },
 
     getTopic(topic) {
       $('#loading').show();
+      
       return ajax(this.topic.url, {
         dataType: "json",
         type: "GET"
@@ -119,6 +177,7 @@ function initializeClickTopic(api) {
       .then(
         (topic_detail) => {
           this.showTopicModal(topic_detail);
+          
           $('#loading').hide();
         }
       ).catch(

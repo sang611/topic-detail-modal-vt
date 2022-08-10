@@ -72,7 +72,7 @@
       height: 20px;
     }
 
-    @media only screen and (max-width: 1200px) {
+    @media only screen and (max-width: 1000px) {
       #topic-modal-wrap {
         display: grid;
         grid-template-columns: 1fr;
@@ -91,6 +91,7 @@
         grid-column: 1;
         grid-row: auto;
       }
+
     }
   }
 
