@@ -123,7 +123,6 @@ function autoShowModal(currentUser) {
 }
 
 function initializeClickTopic(api) {
-  
   autoShowModal(api.getCurrentUser())
   api.modifyClass("component:topic-list-item", {
     showTopicModal(topic_detail) {
@@ -160,7 +159,9 @@ function initializeClickTopic(api) {
         topic_detail: topic_detail,
         more_comment: topic_detail.comment_count <= 3 ? false : true
       });
-      
+
+
+      window.history.replaceState(null, null, `?show-modal=true&topic-slug=${topic_detail.slug}&topic-id=${topic_detail.id}`);
     },
 
     getTopic(topic) {
