@@ -72,8 +72,8 @@ function autoShowModal(currentUser) {
   let topicId = params.get('topic-id');
   let topicSlug = params.get('topic-slug');
   let isShowModal = params.get('show-modal');
-  if(topicId && topicSlug && isShowModal == 'true')
-  ajax(`/t/${topicSlug}/${topicId}`, {
+  if(topicId && isShowModal == 'true')
+  ajax(`/t/${topicId}`, {
     dataType: "json",
     type: "GET"
   })
@@ -122,8 +122,11 @@ function autoShowModal(currentUser) {
   })
 }
 
+
+
 function initializeClickTopic(api) {
-  autoShowModal(api.getCurrentUser())
+  autoShowModal(api.getCurrentUser());
+ 
   api.modifyClass("component:topic-list-item", {
     showTopicModal(topic_detail) {
       const topicDetail = topic_detail.post_stream.posts[0] || {};
@@ -161,7 +164,7 @@ function initializeClickTopic(api) {
       });
 
 
-      window.history.replaceState(null, null, `?show-modal=true&topic-slug=${topic_detail.slug}&topic-id=${topic_detail.id}`);
+      // window.history.pushState(null, null, `?show-modal=true&topic-id=${topic_detail.id}`);
     },
 
     getTopic(topic) {

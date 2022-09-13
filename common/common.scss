@@ -333,7 +333,7 @@
     grid-column: 2;
     border-radius: 10px;
     background: url(#{$background});
-    padding: 60px 48px;
+    padding: 50px 48px;
     color: #000000;
     background-size: 100%;
     word-wrap: break-word;
@@ -473,5 +473,7 @@
         }
       }
     }
+
+  
   }
 }
