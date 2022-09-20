@@ -34,7 +34,7 @@ export default Component.extend(KeyEnterEscape, {
   actions: {
     copyLinkDetail() {
       let currentPath = window.location.href.split('?')[0];
-      if(currentPath == window.location.host) currentPath = `${currentPath}/c/y-tuong/10`
+      if(currentPath == window.location.hostname) currentPath = `${currentPath}/c/y-tuong/10`
       let linkCopy = `${currentPath}?show-modal=true&topic-id=${this.topic.id}`;
       navigator.clipboard.writeText(linkCopy);
     }
