@@ -33,7 +33,7 @@ export default Component.extend(KeyEnterEscape, {
 
   actions: {
     copyLinkDetail() {
-      navigator.clipboard.writeText(`${window.location.href}?show-modal=true&topic-id=${this.topic.id}`);
+      navigator.clipboard.writeText(`${window.location.href.split('?')[0]}?show-modal=true&topic-id=${this.topic.id}`);
     }
   }
 })
