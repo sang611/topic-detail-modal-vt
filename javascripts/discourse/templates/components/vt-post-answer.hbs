@@ -1,0 +1,33 @@
+<div class="topic-reply">
+    <div class="reply-user">
+        <span>{{ answer.answer_group }}</span>
+        {{#if answer.rating_average }}
+            <span style="margin: 0 16px; color: #000;text-shadow: none !important;">|</span>
+            <div class="rating-answer">
+                <span class="score">{{ answer.rating_average }}</span>
+                <i class="star-active"></i>
+            </div>
+        {{/if}}
+    </div>
+    <div class="reply-category">
+        <span>TRẢ LỜI</span>
+        {{#if isValidAction}}
+            <div class="control-action">
+                <i class="fa-sharp fa-solid fa-pen" {{on "click" (action "onEditAnswer" )}}></i>
+                <i class="fa-solid fa-trash" {{on "click" (action "onDeleteAnswer" )}}></i>
+            </div>
+        {{/if}}
+    </div>
+    {{#if isUpdated}}
+        <span class="updated-time">Đã chỉnh sửa ngày {{ date-to-string answer.updated_at format="DD/MM/YYYY" }}</span>
+    {{/if}}
+    <div class="reply-content">
+        {{#if showEdit}}
+            {{vt-edit-answer answer=answer onHide=(action "onHide") topic=topic}}
+        {{else}}
+            {{!-- <pre>{{{ answer.raw }}}</pre> --}}
+            <p>{{ answer.raw }}</p>
+            {{vt-vote-form class="vt-vote-form" answer=answer topic=topic post=topicDetail}}
+        {{/if}}
+    </div>
+</div>

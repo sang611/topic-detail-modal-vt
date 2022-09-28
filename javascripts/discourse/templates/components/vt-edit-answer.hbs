@@ -1,0 +1,25 @@
+<div class="vt-edit-answer-container">
+    {{textarea
+        value=this.inputAnswer
+        class="vt-edit-answer-input"
+        placeholder="Nhập câu trả lời....."
+    }}
+    <div class="vt-button-group">
+        {{d-button
+            title="common.cancelLabel"
+            class="btn-default"
+            action=(action "cancelEdit")
+            computedLabel="Hủy"
+        }}
+        {{d-button
+            type="submit"
+            title="common.updateLabel"
+            class="btn-primary"
+            action=(action "onUpdate")
+            computedLabel="Cập nhật"
+            forwardEvent=true
+            isLoading=isProcess
+            disabled=isProcess
+        }}
+    </div>
+</div>

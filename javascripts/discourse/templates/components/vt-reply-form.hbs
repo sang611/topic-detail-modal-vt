@@ -8,8 +8,11 @@
     placeholder="Nhập câu trả lời....."
   />
     {{d-button
+      type="submit"
       class="btn-primary"
       action=(action "save")
-      type="submit"
+      forwardEvent=true
+      isLoading=isProcess
+      disabled=isProcess
     }}
 </div>

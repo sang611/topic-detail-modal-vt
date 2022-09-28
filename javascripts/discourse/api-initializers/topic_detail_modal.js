@@ -19,6 +19,7 @@ SAVING = "saving",
 OPEN = "open",
 DRAFT = "draft",
 FULLSCREEN = "fullscreen",
+DESTROYED = "destroyed",
 // When creating, these fields are moved into the post model from the composer model
 _create_serializer = {
   raw: "reply",
@@ -72,20 +73,21 @@ function autoShowModal(currentUser) {
   let topicId = params.get('topic-id');
   let topicSlug = params.get('topic-slug');
   let isShowModal = params.get('show-modal');
-  if(topicId && isShowModal == 'true')
-  ajax(`/t/${topicId}`, {
+  if(topicId && topicSlug && isShowModal == 'true')
+  ajax(`/t/${topicSlug}/${topicId}`, {
     dataType: "json",
     type: "GET"
   })
   .then(topic_detail => {
     const topicDetail = topic_detail.post_stream.posts[0] || {};
-      const liked = topic_detail.liked ? "liked" : "";
-      const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
-      
-      commentsList.map(cm => {
-        if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
-        return cm;
-      })
+    const postAnswers = topic_detail.post_answers || [];
+    const liked = topic_detail.liked ? "liked" : "";
+    const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
+
+    commentsList.map(cm => {
+      if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
+      return cm;
+    })
 
       const limitComment = 1;
       const countComment = commentsList.length;
@@ -98,41 +100,42 @@ function autoShowModal(currentUser) {
         hideComments = commentsList.slice(0, countComment - limitComment);
       }
 
-      let modalTopic = showModal("topic-detail-selector");
-      let poster = topic_detail.post_stream.posts[0];
-      
-      topic_detail.creator = {
-        id: poster.user_id,
-        avatar_template: poster.avatar_template,
-        name: poster.name,
-        username: poster.username
-      }
-      modalTopic.setProperties({
-        topicDetail: topicDetail,
-        lastComments: commentsList,
-        hideComments: hideComments,
-        countComment: topic_detail.comment_count,
-        topic: topic_detail,
-        user: currentUser,
-        liked: liked,
-        post: undefined,
-        topic_detail: topic_detail,
-        more_comment: topic_detail.comment_count <= 3 ? false : true
-      });
+    let modalTopic = showModal("topic-detail-selector");
+    let poster = topic_detail.post_stream.posts[0];
+
+    topic_detail.creator = {
+      id: poster.user_id,
+      avatar_template: poster.avatar_template,
+      name: poster.name,
+      username: poster.username
+    }
+    modalTopic.setProperties({
+      topicDetail: topicDetail,
+      postAnswers: postAnswers,
+      lastComments: commentsList,
+      hideComments: hideComments,
+      countComment: topic_detail.comment_count,
+      topic: topic_detail,
+      user: currentUser,
+      liked: liked,
+      post: undefined,
+      topic_detail: topic_detail,
+      more_comment: topic_detail.comment_count <= 3 ? false : true
+    });
   })
 }
 
 
 
 function initializeClickTopic(api) {
-  autoShowModal(api.getCurrentUser());
- 
+  autoShowModal(api.getCurrentUser())
   api.modifyClass("component:topic-list-item", {
     showTopicModal(topic_detail) {
       const topicDetail = topic_detail.post_stream.posts[0] || {};
+      const postAnswers = topic_detail.post_answers || [];
       const liked = topic_detail.liked ? "liked" : "";
       const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
-      
+
       commentsList.map(cm => {
         if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
         return cm;
@@ -152,6 +155,7 @@ function initializeClickTopic(api) {
       let modalTopic = showModal("topic-detail-selector");
       modalTopic.setProperties({
         topicDetail: topicDetail,
+        postAnswers: postAnswers,
         lastComments: commentsList,
         hideComments: hideComments,
         countComment: topic_detail.comment_count,
@@ -164,7 +168,7 @@ function initializeClickTopic(api) {
       });
 
 
-      // window.history.pushState(null, null, `?show-modal=true&topic-id=${topic_detail.id}`);
+      window.history.replaceState(null, null, `?show-modal=true&topic-slug=${topic_detail.slug}&topic-id=${topic_detail.id}`);
     },
 
     getTopic(topic) {
@@ -199,6 +203,12 @@ function initializeClickTopic(api) {
     vt_save(opts) {
       return this.beforeSave().then(() => {
         return this.vt_createPost(opts)
+      });
+    },
+
+    vt_update(formData) {
+      return this.beforeSave().then(() => {
+        return this.vt_updatedPost(formData)
       });
     },
 
@@ -282,6 +292,75 @@ function initializeClickTopic(api) {
       return createdPost.save()
     },
 
+    // action updated answer
+    vt_updatedPost(formData) {
+      if (CREATE_TOPIC === this.action || PRIVATE_MESSAGE === this.action) {
+        this.set("topic", null);
+      }
+
+      const post = this.post;
+      const user = this.user;
+      const postStream = this.get("topic.postStream");
+      const postTypes = this.site.post_types;
+      const postType = this.whisper ? postTypes.whisper : postTypes.regular;
+
+      // Build the post object
+      const updatedPost = this.store.createRecord("post", {
+        cooked: this.getCookedHtml(),
+        post_type: postType,
+      });
+
+
+      this.serialize(_update_serializer, updatedPost);
+      updatedPost.id = formData.id
+      updatedPost.raw = formData.raw
+      updatedPost.rawOld = formData.rawOld
+      updatedPost.editReason = formData.editReason
+      updatedPost.categoryId = formData.categoryId
+      updatedPost.topicId = formData.topicId
+
+      let state = null;
+      // If we're in a topic, we can append the post instantly.
+      if (postStream) {
+        // If it's in reply to another post, increase the reply count
+        if (post) {
+          post.setProperties({
+            reply_count: (post.reply_count || 0) + 1,
+            replies: [],
+          });
+        }
+
+        // We do not stage posts in mobile view, we do not have the "cooked"
+        // Furthermore calculating cooked is very complicated, especially since
+        // we would need to handle oneboxes and other bits that are not even in the
+        // engine, staging will just cause a blank post to render
+        if (!isEmpty(updatedPost.cooked)) {
+          state = postStream.stagePost(updatedPost, user);
+          if (state === "alreadyStaging") {
+            return;
+          }
+        }
+      }
+
+      const composer = this;
+      composer.setProperties({
+        composeState: SAVING,
+        stagedPost: state === "staged" && updatedPost,
+      });
+      return updatedPost.update()
+    },
+
+    // action deleted answer
+    vt_deletedPost(answer) {
+      const deletedPost = this.store.createRecord("post", answer);
+      deletedPost.id = answer.id;
+      return deletedPost.destroyRecord();
+    },
+
+    // action reload topic
+    vt_refresh() {
+      autoShowModal(api.getCurrentUser());
+    }
   })
 
   // let site_header_admin = this.user.admin

@@ -11,7 +11,7 @@ import discourseDebounce from "discourse-common/lib/debounce";
 import { headerOffset } from "discourse/lib/offset-calculator";
 import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { ajax } from "discourse/lib/ajax";
+import showModal from "discourse/lib/show-modal";
 
 const START_DRAG_EVENTS = ["touchstart", "mousedown"];
 const DRAG_EVENTS = ["touchmove", "mousemove"];
@@ -24,18 +24,22 @@ function mouseYPos(e) {
 }
 
 export default Component.extend(KeyEnterEscape, {
+  isProcess: false,
   init() {
     this._super(...arguments);
     this.set('comment', null);
+    this.set('isProcess', false);
   },
 
   actions: {
     required(e) {
 
     },
-    save(e) {
+    save(params, event) {
+      event.stopPropagation();
+      this.set('isProcess', true);
       const composer = this.store.createRecord("composer");
-      const promise = composer
+      composer
         .vt_save(
           {
             imageSizes: {},
@@ -44,35 +48,36 @@ export default Component.extend(KeyEnterEscape, {
             category: this.topic.category_id,
             topic_id: this.topic.id
           }).then((result) => {
-          $(".vt-reply-form-input").val("")
-          this.set('topic', {
-            ...this.topic,
-            answer_user: result.responseJson.post.display_username,
-            answer_content: result.responseJson.post.raw
-          });
-          let html = `
-          <div class="topic-reply">
-            <div class="reply-user">
-              <span>${result.responseJson.post.display_username}</span>
-            </div>
-            <div class="reply-category">
-              <span>TRẢ LỜI</span>
-            </div>
-
-            <div class="reply-content">
-              <i>
-              <pre>${result.responseJson.post.raw}</pre>
-              </i>
-            </div>
-          </div>`
-          $(".topic-content").append('')
-          $(".topic-content").append(html)
-          $(".vt-reply-form-container").hide()
-          $(".vt-reply-form-container-p").hide()
+            if (result.responseJson.post) {
+              this.set('topic', {
+                ...this.topic,
+                answer_user: result.responseJson.post.display_username,
+                answer_content: result.responseJson.post.raw
+              });
+              composer.vt_refresh();
+            } else {
+              showModal("answer-enqueues", {
+                model: result.responseJson,
+                title: "review.approval.answer_title"
+              });
+            }
         })
         .catch((error) => {
-          alert("Bạn chưa có quyền trả lời bài viết này.")
+          if (error?.jqXHR?.responseJSON) {
+            const { errors } = error.jqXHR.responseJSON;
+            if (errors?.length) {
+              alert(errors[0]);
+            }
+          } else {
+            popupAjaxError(error);
+            // alert("Bạn chưa có quyền trả lời bài viết này.");
+          }
+        }).finally(() => {
+          // const timerId = setTimeout(() => {
+            this.set("isProcess", false);
+            // clearTimeout(timerId)
+        // }, 300);
         });
-    },
+    }
   }
 })

@@ -30,7 +30,7 @@ export default Component.extend(KeyEnterEscape, {
     let votes = new Array(5);
     this.set('comment', null);
 
-    for (let i = 0; i < this.topic_detail.qa_user_voted_direction; i++) {
+    for (let i = 0; i < this.answer.self_rating_answer; i++) {
       votes[i] = "active"
     }
     this.set('votes', votes);
@@ -39,35 +39,34 @@ export default Component.extend(KeyEnterEscape, {
 
   actions: {
     voting(e) {
-      
-      let answer_user_id = this.topic.answer_user_id;
-      if(!answer_user_id || answer_user_id === "") 
-        answer_user_id = this.topic_detail.answer_user_id;
-
-
-      if(User.current().id == answer_user_id) {
+      let answer_by = this.answer.answer_by;
+      if(!answer_by || answer_by === "") {
+        return;
+      }
+      if(User.current().id == answer_by) {
         alert("Bạn không thể tự vote cho câu trả lời của mình.");
         return;
       }
 
-      let answer_id = this.topic.answer_id;
-      if(!answer_id || answer_id === "") 
-        answer_id = this.topic_detail.answer_id
+      let answer_id = this.answer.id;
+      if(!answer_id || answer_id === "") {
+        return;
+      }
 
       return ajax("/qa/vote", {
         type: "POST",
         data: { direction: e, post_id: answer_id },
       }).then((response) => {
-        $(".ratings .star").removeClass("active")
-        for (let i = 1; i <= response.vote; i++) {
-          $(`.ratings .star-${i}`).addClass("active")
+        if (response.success == "OK") {
+          alert(`Bạn đã đánh giá ${e} sao.`);
+          const composer = this.store.createRecord("composer");
+          composer.vt_refresh();
         }
-        alert(`Bạn đã đánh giá ${e} sao.`)
       })
       .catch(popupAjaxError)
       .finally(() => {
 
-      });;
+      });
     },
   }
 })

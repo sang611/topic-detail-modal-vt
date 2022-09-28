@@ -86,34 +86,22 @@
 
 
   <div class="vt-modal-body-right">
-    {{vt-copy-link topic=topic}}    
     <div class="topic-content">
       {{dir-span topicDetail.cooked htmlSafe="true"}}
     </div>
-
-    {{#if topic_detail.answer_user}}
-    <div class="topic-reply">
-      <div class="reply-user">
-        <span>{{topic_detail.answer_user}}</span>
+    {{#if postAnswers}}
+      <div class="post-answers">
+        {{#each postAnswers as | answer |}}
+          {{vt-post-answer answer=answer topic=topic post=topicDetail}}
+        {{/each}}
       </div>
-      <div class="reply-category">
-        <span>TRẢ LỜI</span>
-      </div>
-
-      <div class="reply-content">
-        {{!-- {{dir-span topic_detail.answer_content htmlSafe="true"}} --}}
-        <pre>{{topic_detail.answer_content}}</pre>
-      </div>
-      {{vt-vote-form topic=topic post=topicDetail topic_detail=topic_detail}}
-    </div>
-    {{else}}
-    <div class="topic-reply">
-    </div>
-    {{#if topic.is_qa}}
-    {{vt-reply-form topic=topic post=topicDetail}}
-    {{else}}
-    <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể answer.</i>
     {{/if}}
+    {{#if topic_detail.is_qa}}
+      {{#if topic_detail.allow_answer}}
+        {{vt-reply-form topic=topic post=topicDetail}}
+      {{/if}}
+    {{else}}
+      <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể answer.</i>
     {{/if}}
   </div>
 
