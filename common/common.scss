@@ -392,14 +392,17 @@
         letter-spacing: 1px;
         .control-action {
           margin-left: 16px;
-          i {
+          width: 100px;
+          display: flex;
+          svg {
             cursor: pointer;
             font-size: 14px;
             color: #434343;
-            + i {
+            + svg {
               margin-left: 12px;
             }
           }
+
         }
       }
 
