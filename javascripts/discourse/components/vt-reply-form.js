@@ -1,15 +1,5 @@
-import { cancel, later, schedule, throttle } from "@ember/runloop";
-import discourseComputed, {
-  bind,
-  observes,
-} from "discourse-common/utils/decorators";
 import Component from "@ember/component";
-import Composer from "discourse/models/composer";
 import KeyEnterEscape from "discourse/mixins/key-enter-escape";
-import afterTransition from "discourse/lib/after-transition";
-import discourseDebounce from "discourse-common/lib/debounce";
-import { headerOffset } from "discourse/lib/offset-calculator";
-import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import showModal from "discourse/lib/show-modal";
 
@@ -25,12 +15,20 @@ function mouseYPos(e) {
 
 export default Component.extend(KeyEnterEscape, {
   isProcess: false,
+  inputAnswer: "",
+  isProcess: false,
+  isUploading: false,
+  isProcessingUpload: false,
+  model: null,
   init() {
     this._super(...arguments);
+    this.set("model", { reply: "" });
     this.set('comment', null);
     this.set('isProcess', false);
   },
-
+  showUploadSelector() {
+    document.getElementById("file-uploader").click();
+  },
   actions: {
     required(e) {
 
@@ -44,7 +42,7 @@ export default Component.extend(KeyEnterEscape, {
           {
             imageSizes: {},
             editReason: null,
-            raw: $(".vt-reply-form-input").val(),
+            raw: $(".d-editor-input").val(),
             category: this.topic.category_id,
             topic_id: this.topic.id
           }).then((result) => {
@@ -78,6 +76,82 @@ export default Component.extend(KeyEnterEscape, {
             // clearTimeout(timerId)
         // }, 300);
         });
-    }
+    },
+
+    // start 
+    storeToolbarState(toolbarEvent) {
+      this.set("toolbarEvent", toolbarEvent);
+    },
+    onPopupMenuAction(menuAction) {
+        this.send(menuAction);
+    },
+    afterRefresh($preview) {
+        const topic = this.get("topic");
+        const linkLookup = this.linkLookup;
+
+        if (!topic || !linkLookup) {
+          return;
+        }
+
+        // Don't check if there's only one post
+        if (topic.posts_count === 1) {
+          return;
+        }
+
+        const post = this.get("answer");
+        const $links = $("a[href]", $preview);
+        $links.each((idx, l) => {
+          const href = l.href;
+          if (href && href.length) {
+            // skip links added by watched words
+            if (l.dataset.word !== undefined) {
+              return true;
+            }
+
+            // skip links in quotes and oneboxes
+            for (let element = l; element; element = element.parentElement) {
+              if (
+                element.tagName === "DIV" &&
+                element.classList.contains("d-editor-preview")
+              ) {
+                break;
+              }
+
+              if (
+                element.tagName === "ASIDE" &&
+                element.classList.contains("quote")
+              ) {
+                return true;
+              }
+
+              if (
+                element.tagName === "ASIDE" &&
+                element.classList.contains("onebox") &&
+                href !== element.dataset["onebox-src"]
+              ) {
+                return true;
+              }
+            }
+
+            const [linkWarn, linkInfo] = linkLookup.check(post, href);
+
+            if (linkWarn && !this.get("isWhispering")) {
+              const body = I18n.t("composer.duplicate_link", {
+                domain: linkInfo.domain,
+                username: linkInfo.username,
+                post_url: topic.urlForPostNumber(linkInfo.post_number),
+                ago: shortDate(linkInfo.posted_at),
+              });
+              this.appEvents.trigger("composer-messages:create", {
+                extraClass: "custom-body",
+                templateName: "custom-body",
+                body,
+              });
+              return false;
+            }
+          }
+          return true;
+        });
+    },
   }
 })

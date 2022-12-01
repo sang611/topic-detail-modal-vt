@@ -13,7 +13,8 @@ import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
 import User from "discourse/models/user";
-
+import { htmlSafe } from "@ember/template";
+import { autoUpdatingRelativeAge } from "discourse/lib/formatter";
 
 const START_DRAG_EVENTS = ["touchstart", "mousedown"];
 const DRAG_EVENTS = ["touchmove", "mousemove"];
@@ -73,11 +74,16 @@ export default Component.extend(KeyEnterEscape, {
 
           let user_name = this.user.name;
           let user_username = this.user.username;
-
+          let timeAgo = this.renderTimeAgo(response.created_at);
           let html = `<div class="vt-comments-list">
                       <div class="vt-users">
-                        ${avatar}
-                        <span>${(user_name && user_name.trim() != "") ? user_name : user_username}</span>
+                        <div>
+                          ${avatar}
+                          <span>${(user_name && user_name.trim() != "") ? user_name : user_username}</span>
+                        </div>
+                        <div class="time-ago">
+                          ${timeAgo}
+                        </div>
                       </div>
                       <div class="vt-comments-item">
                         ${response.cooked}
@@ -91,8 +97,23 @@ export default Component.extend(KeyEnterEscape, {
           $(".error-input").html(`${e.jqXHR.responseJSON.errors[0]}`);
         })
         .finally(() => {});
+    }
+  },
+  renderTimeAgo(val) {
+    let leaveAgo,
+    format = "medium",
+    title = true;
+    leaveAgo = "true";
 
-        
+    if (val) {
+      let date = new Date(val);
+      return htmlSafe(
+        autoUpdatingRelativeAge(date, {
+          format,
+          title,
+          leaveAgo,
+        })
+      );
     }
   }
 })

@@ -6,6 +6,9 @@
         {{category-link topic.category}}
       </span>
     </div>
+    <div class="time-ago">
+      {{format-date topicDetail.created_at leaveAgo="true"}}
+    </div>
     <div class="vt-comments">
       <div class="vt-comments-title">
         {{topic_detail.title}}
@@ -16,11 +19,11 @@
           {{#if topic.display_name}}
             <b><span class="user-name">{{topic.display_name}}</span></b>
           {{else}}
-          {{#if topic.creator.name}}
-          <b><span class="user-name">{{topic.creator.name}}</span></b>
-          {{else}}
-          <b><span class="user-name">{{topic.creator.username}}</span></b>
-          {{/if}}
+            {{#if topic.creator.name}}
+              <b><span class="user-name">{{topic.creator.name}}</span></b>
+            {{else}}
+              <b><span class="user-name">{{topic.creator.username}}</span></b>
+            {{/if}}
           {{/if}}
         </div>
 
@@ -88,11 +91,16 @@
       {{#each lastComments as |com index|}}
       <div class="vt-comments-list load-init" data-id="{{com.id}}">
         <div class="vt-users">
-          {{avatar com.user_info
-          imageSize="large"
-          }}
-          <span>{{com.name}}</span>
-        </div>
+            <div>
+              {{avatar com.user_info
+              imageSize="large"
+              }}
+              <span>{{com.name}}</span>
+            </div>
+            <div class="time-ago">
+              {{format-date com.created_at leaveAgo="true"}}
+            </div>
+          </div>
         <div class="vt-comments-item">
           {{dir-span com.cooked htmlSafe="true"}}
         </div>

@@ -13,6 +13,8 @@ import positioningWorkaround from "discourse/lib/safari-hacks";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
 import { renderAvatar } from "discourse/helpers/user-avatar";
+import { htmlSafe } from "@ember/template";
+import { autoUpdatingRelativeAge } from "discourse/lib/formatter";
 
 const START_DRAG_EVENTS = ["touchstart", "mousedown"];
 const DRAG_EVENTS = ["touchmove", "mousemove"];
@@ -46,20 +48,42 @@ export default Component.extend(KeyEnterEscape, {
             siteSettings: this.siteSettings,
           })
           let name = comments[i].user.name || comments[i].username
-
+          let timeAgo = this.renderTimeAgo(comments[i].created_at);
           let html = `<div class="vt-comments-list load-init" data-id="${comments[i].id}" >
-        <div class="vt-users">
-          ${avatar}
-          <span>${name}</span>
-        </div>
-        <div class="vt-comments-item">
-          ${comments[i].raw}
-        </div>
-      </div>`
+            <div class="vt-users">
+              <div>
+                ${avatar}
+                <span>${name}</span>
+              </div>
+              <div class="time-ago">
+                ${timeAgo}
+              </div>
+            </div>
+            <div class="vt-comments-item">
+              ${comments[i].raw}
+            </div>
+          </div>`
           $(html).insertAfter($($(".vt-comments-list-container .vt-comments-list").last()))
         }
       }).catch(
         (error) => popupAjaxError(error)
+      );
+    }
+  },
+  renderTimeAgo(val) {
+    let leaveAgo,
+    format = "medium",
+    title = true;
+    leaveAgo = "true";
+
+    if (val) {
+      let date = new Date(val);
+      return htmlSafe(
+        autoUpdatingRelativeAge(date, {
+          format,
+          title,
+          leaveAgo,
+        })
       );
     }
   }

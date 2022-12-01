@@ -7,7 +7,9 @@
         <span>
           {{category-link topic.category}}
         </span>
-        
+      </div>
+      <div class="time-ago">
+        {{format-date topicDetail.created_at leaveAgo="true"}}
       </div>
       <div class="vt-comments">
         <div class="vt-comments-title">
@@ -17,13 +19,13 @@
           <div class="vt-users">
             {{avatar topic.creator imageSize="large"}}
             {{#if topic.display_name}}
-            <b><span class="user-name">{{topic.display_name}}</span></b>
+              <b><span class="user-name">{{topic.display_name}}</span></b>
             {{else}}
-            {{#if topic.creator.name}}
-            <b><span class="user-name">{{topic.creator.name}}</span></b>
-            {{else}}
-            <b><span class="user-name">{{topic.creator.username}}</span></b>
-            {{/if}}
+              {{#if topic.creator.name}}
+                <b><span class="user-name">{{topic.creator.name}}</span></b>
+              {{else}}
+                <b><span class="user-name">{{topic.creator.username}}</span></b>
+              {{/if}}
             {{/if}}
           </div>
 
@@ -57,10 +59,10 @@
 
     <div class="vt-modal-body-comment">
       {{#if more_comment}}
-      {{vt-comments-more topic=topic post=topicDetail}}
+        {{vt-comments-more topic=topic post=topicDetail}}
       {{/if}}
       {{#if topic.is_qa}}
-      {{vt-comments-form topic=topic post=topicDetail user=user}}
+        {{vt-comments-form topic=topic post=topicDetail user=user}}
       {{else}}
       <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể comment.</i>
       {{/if}}
@@ -69,10 +71,15 @@
         {{#each lastComments as |com index|}}
         <div class="vt-comments-list load-init" data-id="{{com.id}}">
           <div class="vt-users">
-            {{avatar com.user_info
-            imageSize="large"
-            }}
-            <span>{{com.name}}</span>
+            <div>
+              {{avatar com.user_info
+              imageSize="large"
+              }}
+              <span>{{com.name}}</span>
+            </div>
+            <div class="time-ago">
+              {{format-date com.created_at leaveAgo="true"}}
+            </div>
           </div>
           <div class="vt-comments-item">
             {{dir-span com.cooked htmlSafe="true"}}
@@ -86,9 +93,13 @@
 
 
   <div class="vt-modal-body-right">
-    {{vt-copy-link topic=topic}} 
     <div class="topic-content">
       {{dir-span topicDetail.cooked htmlSafe="true"}}
+      {{#if tags}}
+        {{#each tags as | tag |}}
+          <span class="topic-tag-content">{{tag}}</span>
+        {{/each}}
+      {{/if}}
     </div>
     {{#if postAnswers}}
       <div class="post-answers">
@@ -105,8 +116,6 @@
       <i style="color: red">Đây không phải là loại câu hỏi, bạn không thể answer.</i>
     {{/if}}
   </div>
-
-
 </div>
 <div id="topic-modal-footer"></div>
 

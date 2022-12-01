@@ -1,9 +1,19 @@
 <div class="vt-edit-answer-container">
-    {{textarea
+    {{!-- {{textarea
         value=this.inputAnswer
         class="vt-edit-answer-input"
         placeholder="Nhập câu trả lời....."
-    }}
+    }} --}}
+    {{!-- <DEditor @value={{this.inputAnswer}} @placeholder="composer.reply_topic_placeholder" @extraButtons={{action "extraButtons"}} @showUploadModal={{route-action "showUploadSelector" }}>
+        {{yield}}
+    </DEditor>
+    <PickFilesButton @fileInputId="file-uploader" @allowMultiple={{true}} /> --}}
+    
+    <ComposerEditor @composer={{this.model}} @storeToolbarState={{action "storeToolbarState" }}
+        @onPopupMenuAction={{action "onPopupMenuAction" }} @showUploadModal={{route-action "showUploadSelector" }}
+        @isUploading={{this.isUploading}} @isProcessingUpload={{this.isProcessingUpload}} @afterRefresh={{action "afterRefresh" }}
+        @allowUpload={{true}} @uploadIcon="far-image" @showToolbar={{true}} @processPreview={{false}}>
+    </ComposerEditor>
     <div class="vt-button-group">
         {{d-button
             title="common.cancelLabel"

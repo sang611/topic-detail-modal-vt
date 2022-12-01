@@ -8,6 +8,8 @@ export default Component.extend({
         this.set("isValidAction", isValidAction);
         const isUpdated = this.answer.version != 1;
         this.set("isUpdated", isUpdated);
+
+        this.set("rating_average", Math.round(this.answer.rating_average))
     },
     actions: {
         onHide() {

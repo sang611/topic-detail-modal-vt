@@ -68,13 +68,13 @@ _add_draft_fields = {},
 FAST_REPLY_LENGTH_THRESHOLD = 10000;
 
 function autoShowModal(currentUser) {
-  
+
   const params = new URLSearchParams(window.location.search)
   let topicId = params.get('topic-id');
   let topicSlug = params.get('topic-slug');
   let isShowModal = params.get('show-modal');
-  if(topicId && isShowModal == 'true')
-  ajax(`/t/${topicId}`, {
+  if(topicId && topicSlug && isShowModal == 'true')
+  ajax(`/t/${topicSlug}/${topicId}`, {
     dataType: "json",
     type: "GET"
   })
@@ -83,22 +83,22 @@ function autoShowModal(currentUser) {
     const postAnswers = topic_detail.post_answers || [];
     const liked = topic_detail.liked ? "liked" : "";
     const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
-
+    const tags = topic_detail.tags|| "";
     commentsList.map(cm => {
       if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
       return cm;
     })
 
-      const limitComment = 1;
-      const countComment = commentsList.length;
-      let lastComments = [];
-      let hideComments = [];
-      if (commentsList.length <= limitComment) {
-        lastComments = commentsList;
-      } else {
-        lastComments = commentsList.slice(countComment - limitComment);
-        hideComments = commentsList.slice(0, countComment - limitComment);
-      }
+    const limitComment = 1;
+    const countComment = commentsList.length;
+    let lastComments = [];
+    let hideComments = [];
+    if (commentsList.length <= limitComment) {
+      lastComments = commentsList;
+    } else {
+      lastComments = commentsList.slice(countComment - limitComment);
+      hideComments = commentsList.slice(0, countComment - limitComment);
+    }
 
     let modalTopic = showModal("topic-detail-selector");
     let poster = topic_detail.post_stream.posts[0];
@@ -120,12 +120,11 @@ function autoShowModal(currentUser) {
       liked: liked,
       post: undefined,
       topic_detail: topic_detail,
-      more_comment: topic_detail.comment_count <= 3 ? false : true
+      more_comment: topic_detail.comment_count <= 3 ? false : true,
+      tags: tags
     });
   })
 }
-
-
 
 function initializeClickTopic(api) {
   autoShowModal(api.getCurrentUser())
@@ -135,7 +134,7 @@ function initializeClickTopic(api) {
       const postAnswers = topic_detail.post_answers || [];
       const liked = topic_detail.liked ? "liked" : "";
       const commentsList = topicDetail.comments ? (topicDetail.comments.reverse() || []) : [];
-
+      const tags = topic_detail.tags || "";
       commentsList.map(cm => {
         if(!cm.name || cm.name.trim() == "") cm.name = cm.username;
         return cm;
@@ -164,16 +163,17 @@ function initializeClickTopic(api) {
         liked: liked,
         post: this.post,
         topic_detail: topic_detail,
-        more_comment: topic_detail.comment_count <= 3 ? false : true
+        more_comment: topic_detail.comment_count <= 3 ? false : true,
+        tags: tags
       });
 
 
-      // window.history.replaceState(null, null, `?show-modal=true&topic-slug=${topic_detail.slug}&topic-id=${topic_detail.id}`);
+      window.history.replaceState(null, null, `?show-modal=true&topic-slug=${topic_detail.slug}&topic-id=${topic_detail.id}`);
     },
 
     getTopic(topic) {
       $('#loading').show();
-      
+
       return ajax(this.topic.url, {
         dataType: "json",
         type: "GET"
@@ -185,7 +185,7 @@ function initializeClickTopic(api) {
       .then(
         (topic_detail) => {
           this.showTopicModal(topic_detail);
-          
+
           $('#loading').hide();
         }
       ).catch(

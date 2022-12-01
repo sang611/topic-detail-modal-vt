@@ -135,6 +135,14 @@
         content: url("data:image/svg+xml,%3Csvg width='25' height='25' viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.31359 15.855L3.06639 11.6078C5.19327 9.48097 8.30553 8.94061 10.9334 9.98677L18.1029 3.52751L16.6176 2.04287C16.3936 1.81827 16.2673 1.51383 16.2673 1.19689C16.2673 0.879346 16.3936 0.574911 16.6176 0.350309C16.8422 0.126302 17.1467 0 17.4636 0C17.7811 0 18.0856 0.126302 18.3102 0.350309L24.6497 6.68982C24.8737 6.91442 25 7.21886 25 7.5364C25 7.85335 24.8737 8.15778 24.6497 8.38238C24.4251 8.60639 24.1207 8.73269 23.8031 8.73269C23.4862 8.73269 23.1817 8.60639 22.9571 8.38238L21.4725 6.89715L15.0132 14.066C16.0594 16.6945 15.519 19.8067 13.3922 21.933L9.14496 17.6858L0 25L7.31359 15.855Z' fill='%23EA0033'/%3E%3C/svg%3E%0A");
       }
     }
+    & .time-ago {
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 21px;
+      text-transform: none;
+      color: #ACACAC;
+    }
 
     .vt-comments {
       display: flex;
@@ -249,7 +257,7 @@
       font-weight: 500;
       font-size: 13px;
       cursor: pointer;
-      
+
       color: rgb(0, 183, 255);
       &.hidden {
         display: none;
@@ -266,8 +274,16 @@
       .vt-users {
         display: flex;
         flex-direction: row;
-        justify-content: left;
+        justify-content: space-between;
         text-transform: uppercase;
+        & .time-ago {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 18px;
+          color: #ACACAC !important;
+          text-transform: none;
+        }
       }
 
       .vt-comments-item {
@@ -347,16 +363,24 @@
         font-size: 20px;
         font-weight: 300;
       }
-
-      
+      .topic-tag-content {
+        font-style: italic;
+        font-weight: 500;
+        font-size: 17px;
+        line-height: 18px;
+        color: #CC1439;
+        margin-right: 8px;
+      }
     }
 
     .topic-reply {
       .reply-content {
-        font-size: 19px;
-        line-height: 32px;
-        font-style: italic;
-        margin-bottom: 26px;
+        .answer-content{
+          font-size: 19px;
+          line-height: 32px;
+          font-style: italic;
+          margin-bottom: 26px;
+        }
 
 
         pre {
@@ -392,17 +416,18 @@
         letter-spacing: 1px;
         .control-action {
           margin-left: 16px;
-          width: 100px;
-          display: flex;
-          svg {
+          i {
             cursor: pointer;
-            // font-size: 14px;
+            font-size: 14px;
             color: #434343;
-            + svg {
+            + i {
               margin-left: 12px;
             }
           }
 
+          svg {
+            cursor: pointer;
+          }
         }
       }
 
@@ -474,6 +499,14 @@
 
       .vt-edit-answer-container {
         margin-top: 20px;
+        .d-editor-container {
+          max-height: 30vh;
+          .d-editor-textarea-wrapper {
+            border-radius: 20px;
+            min-height: 30vh;
+            border-color: #d2d2d2;
+          }
+        }
         .vt-edit-answer-input {
           min-height: 250px;
           padding: 16px 28px;
@@ -487,6 +520,7 @@
         }
 
         .vt-button-group {
+          margin-top: 10px;
           display: flex;
           justify-content: flex-end;
           button.btn-default {
@@ -521,7 +555,12 @@
       position: relative;
       width: 100%;
       display: flex;
-
+      .d-editor-textarea-wrapper {
+        border-radius: 20px;
+        min-height: 30vh;
+        border-color: #d2d2d2;
+        max-width: 33vw;
+      }
       textarea {
         float: left;
         background-color: #F5F5F5;
@@ -534,7 +573,7 @@
         }
       }
 
-      button {
+      .btn-save {
         background: none;
         border: none;
         &.is-loading {
@@ -554,6 +593,7 @@
     .post-answers {
       margin-top: 50px;
       .topic-reply {
+        margin-top: 8px;
         .reply-user {
           display: flex;
           align-items: center;
@@ -573,18 +613,19 @@
             }
           }
 
+          .time-ago{
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 21px;
+            text-shadow: none !important;
+            color: #22261E;
+            text-transform: none;
+          }
         }
         .vt-vote-form {
           display: flex;
           justify-content: flex-end;
-        }
-        .updated-time {
-          display: flex;
-          align-items: center;
-          color: #474747;
-          font-size: 13px;
-          font-weight: 500;
-          margin-top: 6px;
         }
       }
     }

@@ -3,13 +3,21 @@
   <span>TRẢ LỜI</span>
 </p>
 <div class="vt-reply-form-container">
-  <textarea
+  {{!-- <textarea
     class="vt-reply-form-input"
     placeholder="Nhập câu trả lời....."
-  />
+  /> --}}
+    {{!-- <DEditor @placeholder="composer.reply_topic_placeholder">
+      {{yield}}
+    </DEditor> --}}
+    <ComposerEditor @composer={{this.model}} @storeToolbarState={{action "storeToolbarState" }}
+      @onPopupMenuAction={{action "onPopupMenuAction" }} @showUploadModal={{route-action "showUploadSelector" }}
+      @isUploading={{this.isUploading}} @isProcessingUpload={{this.isProcessingUpload}} @afterRefresh={{action "afterRefresh" }}
+      @allowUpload={{true}} @uploadIcon="far-image" @showToolbar={{true}} @processPreview={{false}}>
+    </ComposerEditor>
     {{d-button
       type="submit"
-      class="btn-primary"
+      class="btn-save btn-primary"
       action=(action "save")
       forwardEvent=true
       isLoading=isProcess

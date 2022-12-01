@@ -1,6 +1,12 @@
 <div class="topic-reply">
     <div class="reply-user">
         <span>{{ answer.answer_group }}</span>
+        <span style="margin: 0 16px; color: #000;text-shadow: none !important;">|</span>
+        {{#if isUpdated}}
+            <span class="time-ago">Đã chỉnh sửa: {{ format-date answer.updated_at leaveAgo="true" }}</span>
+        {{else}}
+            <span class="time-ago">{{ format-date answer.created_at leaveAgo="true" }}</span>
+        {{/if}}
         {{#if answer.rating_average }}
             <span style="margin: 0 16px; color: #000;text-shadow: none !important;">|</span>
             <div class="rating-answer">
@@ -12,24 +18,22 @@
     <div class="reply-category">
         <span>TRẢ LỜI</span>
         {{#if isValidAction}}
-            <div class="control-action">
+            <div class="control-action d-flex">
                 {{!-- <i class="fa-sharp fa-solid fa-pen" {{on "click" (action "onEditAnswer" )}}></i>
                 <i class="fa-solid fa-trash" {{on "click" (action "onDeleteAnswer" )}}></i> --}}
-
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14" height="14" {{on "click" (action "onEditAnswer" )}}><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14" height="14" {{on "click" (action "onDeleteAnswer" )}}><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" {{on "click" (action "onEditAnswer" )}}><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+                &nbsp;
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="17" {{on "click" (action "onDeleteAnswer" )}}><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
             </div>
         {{/if}}
     </div>
-    {{#if isUpdated}}
-        <span class="updated-time">Đã chỉnh sửa ngày {{ date-to-string answer.updated_at format="DD/MM/YYYY" }}</span>
-    {{/if}}
     <div class="reply-content">
         {{#if showEdit}}
             {{vt-edit-answer answer=answer onHide=(action "onHide") topic=topic}}
         {{else}}
-            {{!-- <pre>{{{ answer.raw }}}</pre> --}}
-            <p>{{ answer.raw }}</p>
+            <pre class="answer-content">{{{ answer.answer_content }}}</pre>
+            {{!-- <p>{{ answer.raw }}</p> --}}
             {{vt-vote-form class="vt-vote-form" answer=answer topic=topic post=topicDetail}}
         {{/if}}
     </div>
